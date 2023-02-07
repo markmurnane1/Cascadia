@@ -11,6 +11,16 @@ public class App {
 
         Console cs = System.console();
         Reader reader = cs.reader();
+        Board board = new Board();
+
+        board.playersSetup("mark");
+        board.playersSetup("jon");
+        board.playersSetup("peter");
+        board.playersSetup("k");
+
+        board.randomizePlayers();
+        board.displayMoveOrder();
+
 
         while (true) {
             try {
@@ -33,4 +43,5 @@ public class App {
             }
         }
     }
+
 }
