@@ -10,6 +10,9 @@ public class Player {
     public Player() {
 
     }
+    public Player(String userName) {
+        name = userName;
+    }
 
     public void setName(String username) { this.name = username; }
     public void setScore(int x) { this.score = x; }
