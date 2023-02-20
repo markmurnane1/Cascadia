@@ -11,5 +11,6 @@ public class DisplayColour {
         public static final String PURPLE = "\033[0;35m";  // PURPLE
         public static final String CYAN = "\033[0;36m";    // CYAN
         public static final String WHITE = "\033[0;37m";   // WHITE
+        public static final String ORANGE = "\033[38;5;166m"; // ORGANGE
 
 }

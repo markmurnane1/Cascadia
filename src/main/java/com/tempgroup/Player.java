@@ -1,14 +1,15 @@
 package com.tempgroup;
 
 //this class contains all player information
-
+import java.util.*;
 public class Player {
 
-    private int score = 0;
+    private int score;
     private String name;
+    private List<Tile> tiles;
 
     public Player() {
-
+        tiles = new ArrayList<>();
     }
     public Player(String userName) {
         name = userName;
@@ -19,4 +20,17 @@ public class Player {
 
     public int getScore() { return this.score; }
     public String getName() { return this.name; }
+
+    public void generateStarterHabitatTiles()
+    {
+
+    }
+    public void generateTiles()
+    {
+
+    }
+    public void generateHabitats()
+    {
+
+    }
 }

@@ -64,6 +64,7 @@ public class Board {
             }
 
         }
+        board[t.getY() + 1][t.getX() + 1] = t.habitats.get(0).getColour() + t.habitats.get(0).getSymbol() + DisplayColour.RESET;
     }
     public void drawBoard() {
         for(int i = 0; i < WIDTH; i++)
@@ -81,5 +82,32 @@ public class Board {
         System.out.println("Enter Q to quit");
         System.out.println("Please enter the number of users (2-4)");
 
+    }
+    public void setup(Scanner in)
+    {
+        this.displayWelcome();
+
+        int numUsers;
+        String name = "";
+        while(true) {
+            try{
+                numUsers = in.nextInt();
+                if(numUsers >= 2 && numUsers <= 4)
+                {
+                    break;
+                }else{
+                    System.out.println("Please enter a num between 2-4");
+                }
+
+            } catch (Exception e) {
+                System.out.println("Please enter a number between 2-4");
+            }
+        }
+        for(int i = 1; i < (numUsers + 1); i++)
+        {
+            System.out.println("Enter username for player " + i);
+            name = in.next();
+            this.playersSetup(name);
+        }
     }
 }
