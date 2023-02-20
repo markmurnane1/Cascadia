@@ -17,8 +17,8 @@ public class App {
         board.populateBoard();
 
         //testing ascii
-        Tile t = new Tile(25, 25, DisplayColour.BLUE, new Habitat("FOX"));
-        Tile t1 = new Tile(25, 29, DisplayColour.RED, new Habitat("HAWK"));
+        Tile t = new Tile(25, 25, DisplayColour.BLUE, new Habitat("FOX"), new Habitat("HAWK"), new Habitat("FOX"));
+        Tile t1 = new Tile(25, 29, DisplayColour.RED, new Habitat("HAWK"), new Habitat("FOX"));
         Tile t2 = new Tile(29, 25, DisplayColour.YELLOW, new Habitat("FOX"));
         board.drawTiles(t);
         board.drawTiles(t1);

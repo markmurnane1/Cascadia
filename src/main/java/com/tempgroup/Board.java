@@ -64,7 +64,20 @@ public class Board {
             }
 
         }
-        board[t.getY() + 1][t.getX() + 1] = t.habitats.get(0).getColour() + t.habitats.get(0).getSymbol() + DisplayColour.RESET;
+        //Add habitats
+        if(t.habitats.size() == 3)
+        {
+            board[t.getY() + 1][t.getX() + 1] = t.habitats.get(0).getColour() + t.habitats.get(0).getSymbol() + DisplayColour.RESET;
+            board[t.getY() + 1][t.getX() + 2] = t.habitats.get(1).getColour() + t.habitats.get(1).getSymbol() + DisplayColour.RESET;
+            board[t.getY() + 2][t.getX() + 1] = t.habitats.get(2).getColour() + t.habitats.get(2).getSymbol() + DisplayColour.RESET;
+        }
+        if(t.habitats.size() == 2)
+        {
+            board[t.getY() + 1][t.getX() + 1] = t.habitats.get(0).getColour() + t.habitats.get(0).getSymbol() + DisplayColour.RESET;
+            board[t.getY() + 2][t.getX() + 1] = t.habitats.get(1).getColour() + t.habitats.get(1).getSymbol() + DisplayColour.RESET;
+        }else{
+            board[t.getY() + 1][t.getX() + 1] = t.habitats.get(0).getColour() + t.habitats.get(0).getSymbol() + DisplayColour.RESET;
+        }
     }
     public void drawBoard() {
         for(int i = 0; i < WIDTH; i++)

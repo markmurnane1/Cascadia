@@ -6,7 +6,7 @@ public class Player {
 
     private int score;
     private String name;
-    private List<Tile> tiles;
+    private List<Tile> tiles; //Each player will have their own list of tiles we'll print on they're turn
 
     public Player() {
         tiles = new ArrayList<>();
