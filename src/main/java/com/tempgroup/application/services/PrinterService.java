@@ -50,6 +50,6 @@ public class PrinterService {
 
 	private void printHelpBar() {
 		this.moveCursor(0, 9999); // bottom left
-		System.out.print("\u001B[100m Hit q to quit, h for help \u001B[0m");
+		System.out.print("Hit q to quit, h for help");
 	}
 }
