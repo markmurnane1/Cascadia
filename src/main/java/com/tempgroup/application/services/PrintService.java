@@ -4,15 +4,24 @@ package com.tempgroup.application.services;
  * PrinterService assumes the user is using some form of xterm (https://en.wikipedia.org/wiki/Xterm) 
  * based terminal. You can verify this from the shell: `echo $TERM` example output: "xterm-256color".
  */
-public class PrinterService {
-	public PrinterService() {
+public class PrintService {
+	public PrintService() {
 		try {
-			this.enterRawMode();
-			this.printHelpBar();
+			// this.enterRawMode();
+			// this.printHelpBar();
 		} catch (Exception e) {
 			System.out.println("Unable to move terminal to raw mode.");
 			System.exit(1);
 		}
+	}
+
+	public void println(Object o) {
+		this.print(o);
+		System.out.println();
+	}
+
+	public void print(Object o) {
+		System.out.print(o);
 	}
 
 	/*
@@ -51,5 +60,10 @@ public class PrinterService {
 	private void printHelpBar() {
 		this.moveCursor(0, 9999); // bottom left
 		System.out.print("Hit q to quit, h for help");
+	}
+
+	private void clearScreen() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
 	}
 }
