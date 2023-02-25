@@ -24,27 +24,25 @@ public class GameConfiguration {
 	}
 
 	private void setupGame() {
-		try {
-			int numPlayers = Integer.parseInt(prompt("How many players are playing? (2-4)"));
+		int numPlayers = 0;
 
-			if (numPlayers < 2 || numPlayers > 4) {
-				throw new IllegalArgumentException();
+		while (numPlayers < 2 || numPlayers > 4) {
+			try {
+				numPlayers = Integer.parseInt(prompt("How many players are playing? (2-4)"));
+			} catch (Exception e) {
+				System.out.println("You must enter an integer value between 2 and 4.\n");
 			}
-
-			this.numPlayers = numPlayers;
-		} catch (Exception e) {
-			System.out.println("You must enter an integer value between 2 and 4.\n");
-			// return this.setupGame();
 		}
+
+		this.numPlayers = numPlayers;
 
 		ArrayList<String> playerNames = new ArrayList<String>();
 
 		for (int i = 0; i < this.numPlayers; i++) {
-			String playerName = prompt(String.format("\nEnter name of player %d", i + 1));
+			String playerName = "";
 
-			if (playerName.length() == 0) {
-				System.out.println("Player name must be longer than 0 characters\n");
-				// return this.setupGame();
+			while (playerName.isEmpty()) {
+				playerName = prompt(String.format("\nEnter name of player %d", i + 1));
 			}
 
 			playerNames.add(playerName);

@@ -16,5 +16,4 @@ public class PrintController {
 	public void print(Object o) {
 		this.printService.print(o);
 	}
-
 }
