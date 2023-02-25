@@ -1,4 +1,4 @@
-package com.tempgroup.application.controller;
+package com.tempgroup.application.controllers;
 
 import com.tempgroup.application.services.PrintService;
 

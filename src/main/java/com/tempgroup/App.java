@@ -2,9 +2,9 @@ package com.tempgroup;
 
 import java.util.ArrayList;
 
-import com.tempgroup.application.controller.GameController;
-import com.tempgroup.application.controller.InputController;
-import com.tempgroup.application.controller.PrintController;
+import com.tempgroup.application.controllers.GameController;
+import com.tempgroup.application.controllers.InputController;
+import com.tempgroup.application.controllers.PrintController;
 import com.tempgroup.domain.models.GameConfiguration;
 import com.tempgroup.domain.models.Player;
 
