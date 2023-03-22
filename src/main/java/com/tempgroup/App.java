@@ -18,19 +18,29 @@ public class App {
         ArrayList<Player> players = game.getPlayers();
         ArrayList<Tile> tilesChoice = new ArrayList<>();
         ArrayList<Habitat> habitatChoice = new ArrayList<>();
+        ArrayList<Tile> currTiles = new ArrayList<>();
+
 
         System.out.println("\nPlaying order is:");
         for (int i = 0; i < players.size(); i++) {
             System.out.println(String.format("(%d): %s", i + 1, players.get(i).getName()));
         }
-        game.fillBoardWithEmptyTiles();
+
+
 
         while(config.running)
         {
+            game.clearGameBoard();
+            currTiles = players.get(game.getCurrPlayer()).getPlayerTiles();
+            for(int i = 0; i < currTiles.size(); i++)
+            {
+                currTiles.get(i).addTileToBoard(game.getGameBoard());
+            }
+            printer.displayGameBoard(game.getGameBoard());
+
             habitatChoice.clear(); // temporary - we need to return unused tokens back to bag
             tilesChoice.clear(); // temporary -
 
-            printer.displayGameBoard(game.getGameBoard());
 
             for (int i = 0; i < 4; i++) {
                 tilesChoice.add(game.getTileFromTileBag());
@@ -48,7 +58,7 @@ public class App {
             printer.println("");
             printer.displayHabitatChoices(habitatChoice);//Shows the 4 tiles available to select
 
-            int tileChoice = Integer.parseInt(config.prompt("\n[" + players.get(game.getCurrPlayer()).getName() + "]" + "Enter which tile you choose (1-4)"));
+            int tileChoice = (Integer.parseInt(config.prompt("\n[" + players.get(game.getCurrPlayer()).getName() + "]" + "Enter which tile you choose (1-4)")) - 1);
             int rowChoice = Integer.parseInt(config.prompt("Enter the row to place tile"));
             int columnChoice = Integer.parseInt(config.prompt("Enter column to place title"));
 
@@ -56,7 +66,8 @@ public class App {
             chosenTile.setX(columnChoice * 4);
             chosenTile.setY(rowChoice * 4);
 
-            chosenTile.addTileToBoard(game.getGameBoard());
+            players.get(game.getCurrPlayer()).addTileToPlayerTiles(chosenTile);
+
 
             game.endTurn();
 

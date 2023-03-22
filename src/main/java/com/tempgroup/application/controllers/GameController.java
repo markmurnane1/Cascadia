@@ -28,6 +28,8 @@ public class GameController {
 
 		choiceBoard = new Board(16, 4); //Board to graphically show our choice tiles
 
+		this.initStarterTiles();
+
 	}
 
 	private void createPlayers(GameConfiguration config) {
@@ -53,7 +55,7 @@ public class GameController {
 			this.currPlayer++;
 		}
 	}
-	public void fillBoardWithEmptyTiles()
+	public void clearGameBoard()
 	{
 		for(int i = 0; i < gameBoard.getHeight(); i++)
 		{
@@ -94,6 +96,29 @@ public class GameController {
 		habitatBag.remove(0);
 
 		return h;
+	}
+	public void initStarterTiles()
+	{
+		Tile[] starterTile;
+
+		for(int i = 0; i < players.size(); i++)
+		{
+			starterTile = StarterHabitatTile.StarterTileContainer[i];
+
+			starterTile[0].setX(gameBoard.getWidth() / 2);
+			starterTile[0].setY(gameBoard.getHeight() / 2);
+
+			starterTile[1].setX(gameBoard.getWidth() / 2);
+			starterTile[1].setY((gameBoard.getHeight() / 2) - 4);
+
+			starterTile[2].setX((gameBoard.getWidth() / 2) + 4);
+			starterTile[2].setY(gameBoard.getHeight() / 2);
+
+			for(int j = 0; j < 3; j++)
+			{
+				players.get(i).addTileToPlayerTiles(starterTile[j]);
+			}
+		}
 	}
 
 }

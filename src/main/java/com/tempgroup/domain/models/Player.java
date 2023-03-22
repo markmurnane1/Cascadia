@@ -26,4 +26,9 @@ public class Player {
 	}
 
 	public ArrayList<Tile> getPlayerTiles() { return this.playerTiles; }
+
+	public void addTileToPlayerTiles(Tile t)
+	{
+		playerTiles.add(t);
+	}
 }
