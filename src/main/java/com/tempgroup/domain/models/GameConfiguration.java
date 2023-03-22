@@ -1,15 +1,21 @@
 package com.tempgroup.domain.models;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import java.util.Scanner;
 
 public class GameConfiguration {
 	private Scanner scanner;
 
 	public int numPlayers;
+	public boolean running = true;
+	public int HEIGHT = 25;
+	public int WIDTH = 41;
 	public ArrayList<String> playerNames;
+	ArrayList<Tile> tileBag = new ArrayList<Tile>();
 
-	private String prompt(String q) {
+	public String prompt(String q) {
 		System.out.println(q);
 
 		String next = scanner.nextLine();
@@ -21,6 +27,8 @@ public class GameConfiguration {
 		this.scanner = new Scanner(System.in);
 
 		this.setupGame();
+		this.setupTileBag();
+		this.setupHabitatBag();
 	}
 
 	private void setupGame() {
@@ -50,4 +58,51 @@ public class GameConfiguration {
 
 		this.playerNames = playerNames;
 	}
+
+	private void setupTileBag()  //Generate 100 tiles
+	{
+		tileBag = new ArrayList<>();
+
+		for(int i = 0; i < 100; i++)
+		{
+			tileBag.add(new Tile());
+		}
+
+	}
+	public ArrayList<Tile> getTileBag()
+	{
+		return this.tileBag;
+	}
+
+	public ArrayList<Habitat> setupHabitatBag()
+	{
+		ArrayList<Habitat> habitatBag = new ArrayList<>();
+
+
+		for(int i = 0; i < 20; i++)
+		{
+			habitatBag.add(new Habitat(HabitatToken.BEAR));
+		}
+		for(int i = 0; i < 20; i++)
+		{
+			habitatBag.add(new Habitat(HabitatToken.ELK));
+		}
+		for(int i = 0; i < 20; i++)
+		{
+			habitatBag.add(new Habitat(HabitatToken.FOX));
+		}
+		for(int i = 0; i < 20; i++)
+		{
+			habitatBag.add(new Habitat(HabitatToken.HAWK));
+		}
+		for(int i = 0; i < 20; i++)
+		{
+			habitatBag.add(new Habitat(HabitatToken.SALMON));
+		}
+
+		Collections.shuffle(habitatBag);
+
+		return habitatBag;
+	}
+
 }

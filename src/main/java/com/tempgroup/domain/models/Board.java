@@ -10,7 +10,7 @@ public class Board
     {
         this.height = height;
         this.width = width;
-        board = new String[height][width];
+        board = new String[width][height];
 
     }
     public String[][] getBoard()
@@ -19,11 +19,11 @@ public class Board
     }
     public void setBoardPos(int x, int y, String token)
     {
-        board[y][x] = token;
+        board[x][y] = token;
     }
     public String getBoardPos(int x, int y)
     {
-        return board[y][x];
+        return board[x][y];
     }
     public int getHeight()
     {

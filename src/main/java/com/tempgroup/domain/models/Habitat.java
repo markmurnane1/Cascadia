@@ -1,25 +1,41 @@
-package com.tempgroup;
+package com.tempgroup.domain.models;
+
+import com.tempgroup.DisplayColour;
 
 public class Habitat {
     private String colour;
     private String symbol;
-    private String habit;
+    private HabitatToken token;
 
-    public Habitat(String habitat) {
-        switch (habitat) {
-            case "FOX":
+    public Habitat(HabitatToken h) {
+        switch (h) {
+            case FOX:
                 colour = DisplayColour.ORANGE;
                 symbol = "F";
                 break;
-            case "HAWK":
+            case HAWK:
                 colour = DisplayColour.PURPLE;
                 symbol = "H";
+                break;
+            case BEAR:
+                colour = DisplayColour.BLUE; //ADD brown
+                symbol = "B";
+                break;
+            case ELK:
+                colour = DisplayColour.BLACK;
+                symbol = "E";
+                break;
+            case SALMON:
+                colour = DisplayColour.RED;
+                symbol = "S";
                 break;
             default:
                 colour = DisplayColour.RED;
                 symbol = "0";
                 break;
         }
+
+        token = h;
     }
 
     public String getColour() {
@@ -29,4 +45,8 @@ public class Habitat {
     public String getSymbol() {
         return this.symbol;
     }
+
+    public HabitatToken getToken() { return this.token; }
+
+
 }
