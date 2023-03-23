@@ -18,7 +18,8 @@ public class App {
         ArrayList<Player> players = game.getPlayers();
         ArrayList<Tile> tilesChoice = new ArrayList<>();
         ArrayList<Habitat> habitatChoice = new ArrayList<>();
-        ArrayList<Tile> currTiles = new ArrayList<>();
+        ArrayList<Tile> currTiles;
+
 
 
         System.out.println("\nPlaying order is:");
@@ -58,10 +59,18 @@ public class App {
             printer.println("");
             printer.displayHabitatChoices(habitatChoice);//Shows the 4 tiles available to select
 
+
+
             int tileChoice = (Integer.parseInt(config.prompt("\n[" + players.get(game.getCurrPlayer()).getName() + "]" + "Enter which tile you choose (1-4)")) - 1);
             int rowChoice = Integer.parseInt(config.prompt("Enter the row to place tile"));
             int columnChoice = Integer.parseInt(config.prompt("Enter column to place title"));
 
+            while(!game.checkTilePlacementPossible(columnChoice, rowChoice))
+            {
+                rowChoice = Integer.parseInt(config.prompt("Invalid Coordinates: Please try again\nrow: "));
+                columnChoice = Integer.parseInt(config.prompt("column: "));
+
+            }
             Tile chosenTile = tilesChoice.get(tileChoice);
             chosenTile.setX(columnChoice * 4);
             chosenTile.setY(rowChoice * 4);
@@ -70,7 +79,6 @@ public class App {
 
 
             game.endTurn();
-
 
         }
 

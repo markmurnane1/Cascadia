@@ -34,4 +34,13 @@ public class Board
         return this.width;
     }
 
+    public boolean XwithinBounds(int x)
+    {
+        return x*4 >= 0 && x*4 < this.width - 4;
+    }
+    public boolean YwithinBounds(int y)
+    {
+        return y*4 >= 0 && y*4 < this.height - 4;
+    }
+
 }

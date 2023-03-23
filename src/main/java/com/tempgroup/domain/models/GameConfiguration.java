@@ -10,8 +10,8 @@ public class GameConfiguration {
 
 	public int numPlayers;
 	public boolean running = true;
-	public int HEIGHT = 25;
-	public int WIDTH = 41;
+	public int HEIGHT = 8*4;
+	public int WIDTH = 14*4;
 	public ArrayList<String> playerNames;
 	ArrayList<Tile> tileBag = new ArrayList<Tile>();
 

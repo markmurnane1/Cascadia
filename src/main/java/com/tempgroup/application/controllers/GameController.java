@@ -26,7 +26,7 @@ public class GameController {
 
 		gameBoard = new Board(config.WIDTH, config.HEIGHT);
 
-		choiceBoard = new Board(16, 4); //Board to graphically show our choice tiles
+		choiceBoard = new Board(16, 4); //Small board to graphically show our choice tiles
 
 		this.initStarterTiles();
 
@@ -119,6 +119,44 @@ public class GameController {
 				players.get(i).addTileToPlayerTiles(starterTile[j]);
 			}
 		}
+	}
+	public boolean checkTilePlacementPossible(int x, int y)
+	{
+		//If the x,y symbol isn't coloured then we can assume position empty
+		if(gameBoard.getBoardPos(x*4,y*4).equals("#") && gameBoard.XwithinBounds(x) && gameBoard.YwithinBounds(y))
+		{
+
+			//top left
+			if(x == 0 && y == 0) return !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#");
+
+			//bottom left
+			if(y*4 == gameBoard.getHeight() - 4 && x == 0) return !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) - 1).equals("#");
+
+			//top right
+			if(x*4 == gameBoard.getWidth() - 4 && y == 0) return  !gameBoard.getBoardPos((x * 4) - 1, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#");
+
+			//along left side
+			if(x == 0) return !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#") ||
+									!gameBoard.getBoardPos(x * 4, (y * 4) - 1).equals("#");
+
+			//along top
+			if(y == 0) return !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#") ||
+						!gameBoard.getBoardPos((x * 4) - 1, y * 4).equals("#");
+
+			//along bottom
+			if(y*4 == gameBoard.getHeight() - 4) return !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) - 1).equals("#") ||
+					!gameBoard.getBoardPos((x * 4) - 1, y * 4).equals("#");
+
+			//along right side
+			if(x*4 == gameBoard.getWidth() - 4) return !gameBoard.getBoardPos((x * 4) - 1, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#") ||
+					!gameBoard.getBoardPos(x * 4, (y * 4) - 1).equals("#");
+
+			//check every direction
+			return !gameBoard.getBoardPos((x * 4) - 1, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) - 1).equals("#") || !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") ||
+					!gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#");
+		}
+
+		return false;
 	}
 
 }
