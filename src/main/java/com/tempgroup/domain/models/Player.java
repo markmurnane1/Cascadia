@@ -20,6 +20,7 @@ public class Player {
 	public int getScore() {
 		return this.score;
 	}
+	public void addToScore(int x) { this.score += x; }
 
 	public void setScore(int score) {
 		this.score = score;

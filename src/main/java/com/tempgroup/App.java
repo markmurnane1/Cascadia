@@ -1,6 +1,7 @@
 package com.tempgroup;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.tempgroup.application.controllers.GameController;
 import com.tempgroup.application.controllers.InputController;
@@ -19,6 +20,8 @@ public class App {
         ArrayList<Tile> tilesChoice = new ArrayList<>();
         ArrayList<Habitat> habitatChoice = new ArrayList<>();
         ArrayList<Tile> currTiles;
+
+        Scoring scoreCard = new Scoring();
 
 
         System.out.println("\nPlaying order is:");
@@ -112,8 +115,17 @@ public class App {
 
 
             game.endTurn();
-
         }
 
+        //Scoring
+        int scoringCardNumber = new Random().nextInt(2) + 1;
+        for(int i = 0; i < players.size(); i++)
+        {
+            players.get(i).addToScore(scoreCard.bearScoringCard(players.get(i).getPlayerTiles(), scoringCardNumber));
+            players.get(i).addToScore(scoreCard.elkScoringCard(players.get(i).getPlayerTiles(), scoringCardNumber));
+            players.get(i).addToScore(scoreCard.foxScoringCard(players.get(i).getPlayerTiles(), scoringCardNumber));
+            players.get(i).addToScore(scoreCard.hawkScoringCard(players.get(i).getPlayerTiles(), scoringCardNumber));
+            players.get(i).addToScore(scoreCard.salmonScoringCard(players.get(i).getPlayerTiles(), scoringCardNumber));
+        }
     }
 }
