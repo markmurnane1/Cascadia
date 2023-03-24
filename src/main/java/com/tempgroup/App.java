@@ -21,12 +21,10 @@ public class App {
         ArrayList<Tile> currTiles;
 
 
-
         System.out.println("\nPlaying order is:");
         for (int i = 0; i < players.size(); i++) {
             System.out.println(String.format("(%d): %s", i + 1, players.get(i).getName()));
         }
-
 
 
         while(config.running)
@@ -39,32 +37,33 @@ public class App {
             }
             printer.displayGameBoard(game.getGameBoard());
 
-            habitatChoice.clear(); // temporary - we need to return unused tokens back to bag
-            tilesChoice.clear(); // temporary -
 
 
             for (int i = 0; i < 4; i++) {
+                habitatChoice.add(game.getHabitatFromBag());
                 tilesChoice.add(game.getTileFromTileBag());
                 tilesChoice.get(i).setX(i * 4);
                 tilesChoice.get(i).setY(0);
             }
             game.addChoiceTilesToChoiceBoard(tilesChoice);
 
-            for (int i = 0; i < 4; i++) {
-                habitatChoice.add(game.getHabitatFromBag());
-            }
-
 
             printer.displayChoiceTiles(game.getChoiceBoard());
             printer.println("");
             printer.displayHabitatChoices(habitatChoice);//Shows the 4 tiles available to select
 
+            if(game.handleHabitatCulling(habitatChoice))
+            {
+                printer.println("New Wildlife tokens: ");
+                printer.displayHabitatChoices(habitatChoice);
+            }
 
 
             int tileChoice = (Integer.parseInt(config.prompt("\n[" + players.get(game.getCurrPlayer()).getName() + "]" + "Enter which tile you choose (1-4)")) - 1);
             int rowChoice = Integer.parseInt(config.prompt("Enter the row to place tile"));
             int columnChoice = Integer.parseInt(config.prompt("Enter column to place title"));
 
+            //Tile Placement
             while(!game.checkTilePlacementPossible(columnChoice, rowChoice))
             {
                 rowChoice = Integer.parseInt(config.prompt("Invalid Coordinates: Please try again\nrow: "));
@@ -72,10 +71,44 @@ public class App {
 
             }
             Tile chosenTile = tilesChoice.get(tileChoice);
+            tilesChoice.remove(tileChoice);
             chosenTile.setX(columnChoice * 4);
             chosenTile.setY(rowChoice * 4);
-
             players.get(game.getCurrPlayer()).addTileToPlayerTiles(chosenTile);
+
+            //remove unused tiles back to bag
+            for(int i = 0; i < tilesChoice.size(); i++)
+            {
+                game.returnTileToBag(tilesChoice.get(i));
+                tilesChoice.remove(tilesChoice.get(i));
+            }
+
+
+
+
+            Habitat h = habitatChoice.get(tileChoice);
+            rowChoice = Integer.parseInt(config.prompt("Enter the row to place Wildlife token: "));
+            columnChoice = Integer.parseInt(config.prompt("Enter column to place Wildlife token: "));
+
+            //placing HabitatToken
+            for(int i = 0; i < currTiles.size(); i++)
+            {
+                if(currTiles.get(i).getX() == columnChoice * 4 && currTiles.get(i).getY() == rowChoice * 4)
+                {
+
+                    Tile modifiedTile = currTiles.get(i);
+                    modifiedTile.habitats.clear();
+                    modifiedTile.habitats.add(h);
+                    habitatChoice.remove(h);
+                    players.get(game.getCurrPlayer()).removeTileFromPlayerTiles(currTiles.get(i));
+                    players.get(game.getCurrPlayer()).addTileToPlayerTiles(modifiedTile);
+
+                }
+            }
+
+            for(int i = 0; i < habitatChoice.size(); i++) game.returnHabitatToBag(habitatChoice.get(i));
+            habitatChoice.clear();
+
 
 
             game.endTurn();

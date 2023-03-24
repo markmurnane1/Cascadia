@@ -73,6 +73,7 @@ public class GameConfiguration {
 	{
 		return this.tileBag;
 	}
+	public Scanner getScanner() { return this.scanner; }
 
 	public ArrayList<Habitat> setupHabitatBag()
 	{

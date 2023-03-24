@@ -31,4 +31,9 @@ public class Player {
 	{
 		playerTiles.add(t);
 	}
+	public void removeTileFromPlayerTiles(Tile t) { playerTiles.remove(t); }
+
+
+
+
 }
