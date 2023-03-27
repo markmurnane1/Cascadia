@@ -100,11 +100,17 @@ public class App {
                 {
 
                     Tile modifiedTile = currTiles.get(i);
-                    modifiedTile.habitats.clear();
-                    modifiedTile.habitats.add(h);
-                    habitatChoice.remove(h);
-                    players.get(game.getCurrPlayer()).removeTileFromPlayerTiles(currTiles.get(i));
-                    players.get(game.getCurrPlayer()).addTileToPlayerTiles(modifiedTile);
+                    if(modifiedTile.habitats.contains(h))
+                    {
+                        modifiedTile.habitats.clear();
+                        modifiedTile.habitats.add(h);
+                        habitatChoice.remove(h);
+                        players.get(game.getCurrPlayer()).removeTileFromPlayerTiles(currTiles.get(i));
+                        players.get(game.getCurrPlayer()).addTileToPlayerTiles(modifiedTile);
+                    }else{
+                        System.out.println("Invalid Wildlife token placement");
+                    }
+
 
                 }
             }
@@ -113,7 +119,7 @@ public class App {
             habitatChoice.clear();
 
 
-
+            if(game.checkGameOver()) config.running = false;
             game.endTurn();
         }
 

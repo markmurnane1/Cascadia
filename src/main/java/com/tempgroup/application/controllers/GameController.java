@@ -190,7 +190,7 @@ public class GameController {
 					sameTokens.add(habitatList.get(j));
 				}
 			}
-			System.out.println(same);
+
 			if(sameTokens.size() == 4)
 			{
 				System.out.println("\nculling 4");
@@ -228,6 +228,14 @@ public class GameController {
 			}
 		}
 
+		return false;
+	}
+	public boolean checkGameOver()
+	{
+		if(this.tilesBag.size() <= 3)
+		{
+			return true;
+		}
 		return false;
 	}
 
