@@ -10,8 +10,7 @@ public class GameConfiguration {
 
 	public int numPlayers;
 	public boolean running = true;
-	public int HEIGHT = 8*4;
-	public int WIDTH = 14*4;
+
 	public ArrayList<String> playerNames;
 	ArrayList<Tile> tileBag = new ArrayList<Tile>();
 
@@ -65,9 +64,29 @@ public class GameConfiguration {
 
 		for(int i = 0; i < 100; i++)
 		{
-			tileBag.add(new Tile());
-		}
+			Tile tile = new Tile();
 
+			int numOfTerrains = new Random().nextInt(2) + 1;
+			int numOfHabitats = new Random().nextInt(2) + 1;
+
+			tile.habitats = new ArrayList<Habitat>();
+			for(int j = 0; j < numOfHabitats; j++)
+			{
+				int pickHabitat = new Random().nextInt(HabitatToken.values().length);
+				Habitat h = new Habitat(HabitatToken.VALUES.get(pickHabitat));
+				tile.habitats.add(h);
+			}
+
+			tile.terrains = new ArrayList<Terrain>();
+			for(int j = 0; j < numOfTerrains; j++)
+			{
+				int pickTerrain = new Random().nextInt(TerrainType.values().length);
+				Terrain t = new Terrain(TerrainType.VALUES.get(pickTerrain));
+				tile.terrains.add(t);
+			}
+
+			tileBag.add(tile);
+		}
 	}
 	public ArrayList<Tile> getTileBag()
 	{

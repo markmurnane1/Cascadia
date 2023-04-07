@@ -61,7 +61,6 @@ public class PrintController {
 	public void displayChoiceTiles(Board choiceBoard)
 	{
 
-
 		this.println("\nYour tiles: ");
 		for(int i = 0; i < choiceBoard.getHeight(); i++)
 		{

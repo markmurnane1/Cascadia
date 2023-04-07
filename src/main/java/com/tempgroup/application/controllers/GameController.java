@@ -1,15 +1,14 @@
 package com.tempgroup.application.controllers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
-import com.tempgroup.DisplayColour;
-import com.tempgroup.application.services.PrintService;
 import com.tempgroup.domain.models.*;
+import com.tempgroup.domain.models.Move.RandomMoveStrategy;
+import com.tempgroup.domain.models.Player.APlayer;
+import com.tempgroup.domain.models.Player.AiPlayer;
 
 public class GameController {
-	private ArrayList<Player> players;
+	private ArrayList<APlayer> players;
 	private int currPlayer;
 	private ArrayList<Tile> tilesBag;
 	private ArrayList<Habitat> habitatBag;
@@ -20,13 +19,10 @@ public class GameController {
 	public GameController(GameConfiguration config) {
 		this.createPlayers(config);
 		currPlayer = 0;
-		tilesBag = new ArrayList<Tile>();
 		tilesBag = config.getTileBag();
-
-		habitatBag = new ArrayList<Habitat>();
 		habitatBag = config.setupHabitatBag();
 
-		gameBoard = new Board(config.WIDTH, config.HEIGHT);
+		gameBoard = new Board(Constants.WIDTH * Constants.TILESIZE, Constants.HEIGHT * Constants.TILESIZE);
 
 		choiceBoard = new Board(16, 4); //Small board to graphically show our choice tiles
 		scanner = config.getScanner();
@@ -36,20 +32,22 @@ public class GameController {
 	}
 
 	private void createPlayers(GameConfiguration config) {
-		this.players = new ArrayList<Player>();
+		this.players = new ArrayList<APlayer>();
 
-		for (int i = 0; i < config.numPlayers; i++) {
+		/*for (int i = 0; i < config.numPlayers; i++) {
 			Player player = new Player(config.playerNames.get(i));
 			this.players.add(player);
-		}
+		}*/
+		//Collections.shuffle(this.players);
+		APlayer bot1 = new AiPlayer("Bot1", new RandomMoveStrategy(), this);
+		APlayer bot2 = new AiPlayer("Bot2", new RandomMoveStrategy(), this);
 
-		Collections.shuffle(this.players);
+		this.players.add(bot1);
+		this.players.add(bot2);
 	}
-
 
 	public void endTurn()
 	{
-
 		if(currPlayer == players.size() - 1)
 		{
 			currPlayer = 0;
@@ -57,33 +55,23 @@ public class GameController {
 			this.currPlayer++;
 		}
 	}
-	public void clearGameBoard()
+
+	public void addChoiceTilesToChoiceBoard(Tile[] choiceTiles)
 	{
-		for(int i = 0; i < gameBoard.getHeight(); i++)
+		for(int i = 0; i < choiceTiles.length; i++)
 		{
-			for(int j = 0; j < gameBoard.getWidth(); j++)
-			{
-				gameBoard.setBoardPos(j,i, "#");
-			}
-		}
-	}
-	public void addChoiceTilesToChoiceBoard(ArrayList<Tile> choiceTiles)
-	{
-		for(int i = 0; i < choiceTiles.size(); i++)
-		{
-			choiceTiles.get(i).addTileToBoard(choiceBoard);
+			choiceBoard.addTileToBoard(choiceTiles[i]);
 		}
 	}
 
 	public int getCurrPlayer() { return currPlayer; }
 
-	public ArrayList<Player> getPlayers() {
+	public ArrayList<APlayer> getPlayers() {
 		return this.players;
 	}
 	public Board getGameBoard() { return this.gameBoard; }
 	public Board getChoiceBoard() { return this.choiceBoard; }
 
-	public ArrayList<Tile> getTilesBag() { return this.tilesBag; }
 
 	public Tile getTileFromTileBag() {
 
@@ -117,14 +105,14 @@ public class GameController {
 		{
 			starterTile = StarterHabitatTile.StarterTileContainer[i];
 
-			starterTile[0].setX(gameBoard.getWidth() / 2);
-			starterTile[0].setY(gameBoard.getHeight() / 2);
+			starterTile[0].setX(Constants.WIDTH / 2);
+			starterTile[0].setY(Constants.HEIGHT / 2);
 
-			starterTile[1].setX(gameBoard.getWidth() / 2);
-			starterTile[1].setY((gameBoard.getHeight() / 2) - 4);
+			starterTile[1].setX(Constants.WIDTH / 2);
+			starterTile[1].setY((Constants.HEIGHT / 2) - 1);
 
-			starterTile[2].setX((gameBoard.getWidth() / 2) + 4);
-			starterTile[2].setY(gameBoard.getHeight() / 2);
+			starterTile[2].setX((Constants.WIDTH / 2) + 1);
+			starterTile[2].setY(Constants.HEIGHT / 2);
 
 			for(int j = 0; j < 3; j++)
 			{
@@ -132,100 +120,61 @@ public class GameController {
 			}
 		}
 	}
-	public boolean checkTilePlacementPossible(int x, int y)
-	{
-		//If the x,y symbol isn't coloured then we can assume position empty
-		if(gameBoard.getBoardPos(x*4,y*4).equals("#") && gameBoard.XwithinBounds(x) && gameBoard.YwithinBounds(y))
-		{
-
-			//top left
-			if(x == 0 && y == 0) return !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#");
-
-			//bottom left
-			if(y*4 == gameBoard.getHeight() - 4 && x == 0) return !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) - 1).equals("#");
-
-			//top right
-			if(x*4 == gameBoard.getWidth() - 4 && y == 0) return  !gameBoard.getBoardPos((x * 4) - 1, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#");
-
-			//along left side
-			if(x == 0) return !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#") ||
-									!gameBoard.getBoardPos(x * 4, (y * 4) - 1).equals("#");
-
-			//along top
-			if(y == 0) return !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#") ||
-						!gameBoard.getBoardPos((x * 4) - 1, y * 4).equals("#");
-
-			//along bottom
-			if(y*4 == gameBoard.getHeight() - 4) return !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) - 1).equals("#") ||
-					!gameBoard.getBoardPos((x * 4) - 1, y * 4).equals("#");
-
-			//along right side
-			if(x*4 == gameBoard.getWidth() - 4) return !gameBoard.getBoardPos((x * 4) - 1, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#") ||
-					!gameBoard.getBoardPos(x * 4, (y * 4) - 1).equals("#");
-
-			//check every direction
-			return !gameBoard.getBoardPos((x * 4) - 1, y * 4).equals("#") || !gameBoard.getBoardPos(x * 4, (y * 4) - 1).equals("#") || !gameBoard.getBoardPos((x * 4) + 4, y * 4).equals("#") ||
-					!gameBoard.getBoardPos(x * 4, (y * 4) + 4).equals("#");
-		}
-
-		return false;
-	}
-
 	public boolean handleHabitatCulling(ArrayList<Habitat> habitatList)
 	{
 		ArrayList<Habitat> sameTokens = new ArrayList<>();
+
 		String choice;
 		int same;
 
 
-		for(int i = 0; i < habitatList.size(); i++)
-		{
-			same = 0;
-			sameTokens.clear();
 
-			for(int j = 0; j < habitatList.size(); j++) {
+		for(int i = 0; i < habitatList.size(); i++) {
+			same = 0;
+
+			for (int j = 0; j < habitatList.size(); j++) {
 
 				if (habitatList.get(i).getToken() == (habitatList.get(j).getToken())) {
 					same++;
 					sameTokens.add(habitatList.get(j));
 				}
 			}
+		}
+		if(sameTokens.size() == 4)
+		{
+			System.out.println("\nculling 4");
+			same = 4;
+			//return tokens to bag and get 4 more
+			for(int l = 0; l < same; l++) returnHabitatToBag(habitatList.get(l));
+			shuffleHabitatBag();
+			sameTokens.clear();
+			for(int o = 0; o < same; o++) sameTokens.add(getHabitatFromBag());
 
-			if(sameTokens.size() == 4)
+			return true;
+		}
+		if(sameTokens.size() == 3)
+		{
+			System.out.println("\nculling 3");
+			same = 3;
+			System.out.println("Would you like to cull (y/n)");
+			choice = scanner.nextLine();
+
+			if(choice.equals("y") || choice.equals("Y"))
 			{
-				System.out.println("\nculling 4");
-				same = 4;
-				//return tokens to bag and get 4 more
-				for(int l = 0; l < same; l++) returnHabitatToBag(habitatList.get(l));
+				for(int n = 0; n < habitatList.size(); n++){
+					returnHabitatToBag(habitatList.get(n));
+				}
+				habitatList.clear();
+
 				shuffleHabitatBag();
-				sameTokens.clear();
-				for(int o = 0; o < same; o++) sameTokens.add(getHabitatFromBag());
+
+				for(int o = 0; o < 4; o++) habitatList.add(getHabitatFromBag());
 
 				return true;
+			}else{
+				return false;
 			}
-			if(sameTokens.size() == 3)
-			{
-				System.out.println("\nculling 3");
-				same = 3;
-				System.out.println("Would you like to cull (y/n)");
-				choice = scanner.nextLine();
 
-				if(choice.equals("y") || choice.equals("Y"))
-				{
-					for(int n = 0; n < habitatList.size(); n++){
-						returnHabitatToBag(habitatList.get(n));
-					}
-					habitatList.clear();
-
-					shuffleHabitatBag();
-
-					for(int o = 0; o < 4; o++) habitatList.add(getHabitatFromBag());
-
-					return true;
-				}else{
-					return false;
-				}
-			}
 		}
 
 		return false;
@@ -238,5 +187,58 @@ public class GameController {
 		}
 		return false;
 	}
+	public List<Point> validMoves(Tile[][] tileMatrix){
+		List<Point> possibleMoves = new ArrayList<>();
 
+		for(int row = 1; row < Constants.WIDTH - 1; row++){
+
+			for(int column = 1; column < Constants.HEIGHT - 1; column++){
+
+				if(tileMatrix[row][column].emptyTile()){
+
+					if(!tileMatrix[row+1][column].emptyTile()){
+						Point p = new Point(row, column);
+						possibleMoves.add(p);
+
+					}else if(!tileMatrix[row-1][column].emptyTile()){
+						Point p = new Point(row, column);
+						possibleMoves.add(p);
+
+					}else if(!tileMatrix[row][column+1].emptyTile()){
+						Point p = new Point(row, column);
+						possibleMoves.add(p);
+
+					}else if(!tileMatrix[row+1][column-1].emptyTile()){
+						Point p = new Point(row, column);
+						possibleMoves.add(p);
+
+					}
+
+				}
+			}
+		}
+
+		return possibleMoves;
+	}
+
+
+	public List<Tile> getValidHabitatMoves(ArrayList<Tile> playerTiles, Habitat h) {
+		List<Tile> possibleTiles = new ArrayList<>();
+
+		for(int i = 0; i < playerTiles.size(); i++){
+
+			for(int j = 0; j < playerTiles.get(i).habitats.size(); j++){
+
+				if(playerTiles.get(i).habitats.get(j).getToken().equals(h.getToken())){
+
+					if(playerTiles.get(i).finalHabitat == null){
+
+						possibleTiles.add(playerTiles.get(i));
+					}
+				}
+			}
+		}
+
+		return possibleTiles;
+	}
 }
