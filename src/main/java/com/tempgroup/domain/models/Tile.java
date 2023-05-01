@@ -1,21 +1,17 @@
 package com.tempgroup.domain.models;
 
-import com.tempgroup.DisplayColour;
-
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Tile {
 
     public List<Habitat> habitats; //tile can have up to 3 wildlife token
     public List<Terrain> terrains; //tiles can have upto 2 terrains
     public Habitat finalHabitat;
-    boolean wildLifeTokenPlaced = false;
     private int x, y;
 
-
+    public boolean habitatScored = false;
 
     public Tile()
     {

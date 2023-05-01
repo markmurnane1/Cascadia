@@ -2,7 +2,7 @@ package com.tempgroup.domain.models.Player;
 
 import com.tempgroup.application.controllers.GameController;
 import com.tempgroup.domain.models.Habitat;
-import com.tempgroup.domain.models.Point;
+import com.tempgroup.domain.models.ScoreCard.AScoreCard;
 import com.tempgroup.domain.models.Tile;
 
 import java.util.ArrayList;
@@ -21,12 +21,12 @@ public class HumanPlayer extends APlayer {
 
 
 	@Override
-	public void takeTileTurn(Tile[] choiceTiles) {
+	public void takeTileTurn(ArrayList<Tile> choiceTiles, AScoreCard scoreCard) {
 
 	}
 
 	@Override
-	public void takeHabitatTurn(ArrayList<Habitat> choiceHabitat) {
+	public void takeHabitatTurn(ArrayList<Habitat> choiceHabitat, AScoreCard scoreCard) {
 
 	}
 }

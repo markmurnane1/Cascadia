@@ -1,4 +1,4 @@
-package com.tempgroup.domain.models;
+package com.tempgroup.domain.models.Utility;
 
 public class Point {
     public int x;

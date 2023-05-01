@@ -1,7 +1,5 @@
 package com.tempgroup.domain.models;
 
-import com.tempgroup.DisplayColour;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

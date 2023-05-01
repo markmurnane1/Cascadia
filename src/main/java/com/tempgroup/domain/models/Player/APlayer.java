@@ -1,21 +1,21 @@
 package com.tempgroup.domain.models.Player;
 
-import com.tempgroup.domain.models.Constants;
+import com.tempgroup.domain.models.ScoreCard.AScoreCard;
+import com.tempgroup.domain.models.Utility.Constants;
 import com.tempgroup.domain.models.Habitat;
-import com.tempgroup.domain.models.Point;
 import com.tempgroup.domain.models.Tile;
 
 import java.util.ArrayList;
 
 public abstract class APlayer {
     private String name;
-    private int score;
-    private ArrayList<Tile> playerTiles; //useful for placing habitats
+    private int turnsTaken;
+    private ArrayList<Tile> playerTiles;
     private Tile[][] playerTileMatrix;
 
     APlayer(String name){
         this.name = name;
-        this.score = 0;
+        turnsTaken = 0;
         playerTiles = new ArrayList<>();
         playerTileMatrix = new Tile[Constants.WIDTH][Constants.HEIGHT];
 
@@ -28,30 +28,31 @@ public abstract class APlayer {
             }
         }
     }
-    public String getName(){
+    public String getName()
+    {
         return name;
     }
-    public int getScore(){
-        return score;
+    public int getTurnsTaken()
+    {
+        return this.turnsTaken;
     }
-    public void setScore(int score){
-        this.score = score;
+    public void incrementTurnTaken()
+    {
+        this.turnsTaken++;
     }
-    public ArrayList<Tile> getPlayerTiles() {
+    public ArrayList<Tile> getPlayerTiles()
+    {
         return this.playerTiles;
     }
-    public Tile[][] getPlayerTileMatrix(){ return this.playerTileMatrix; }
-    public void addTileToPlayerTiles(Tile t) {
+    public Tile[][] getPlayerTileMatrix()
+    {
+        return this.playerTileMatrix;
+    }
+    public void addTileToPlayerTiles(Tile t)
+    {
         playerTileMatrix[t.getX()][t.getY()] = t;
         playerTiles.add(t);
     }
-    public void removeTileFromPlayerTiles(Tile t) {
-        Tile t2 = new Tile(); //empty tile
-        t2.setX(t.getX());
-        t2.setY(t.getY());
-        playerTileMatrix[t.getX()][t.getY()] = t2;
-
-    }
-    public abstract void takeTileTurn(Tile[] choiceTiles);
-    public abstract void takeHabitatTurn(ArrayList<Habitat> choiceHabitat);
+    public abstract void takeTileTurn(ArrayList<Tile> choiceTiles, AScoreCard scoreCard);
+    public abstract void takeHabitatTurn(ArrayList<Habitat> choiceHabitat, AScoreCard scoreCard);
 }

@@ -1,6 +1,7 @@
 package com.tempgroup.domain.models;
 
-import com.tempgroup.DisplayColour;
+import com.tempgroup.domain.models.Utility.DisplayColour;
+import com.tempgroup.domain.models.Utility.Constants;
 
 public class Board
 {

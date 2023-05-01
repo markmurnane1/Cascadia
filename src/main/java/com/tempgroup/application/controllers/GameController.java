@@ -1,11 +1,15 @@
 package com.tempgroup.application.controllers;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.tempgroup.domain.models.*;
+import com.tempgroup.domain.models.Move.MaxScoreStrategy;
 import com.tempgroup.domain.models.Move.RandomMoveStrategy;
 import com.tempgroup.domain.models.Player.APlayer;
 import com.tempgroup.domain.models.Player.AiPlayer;
+import com.tempgroup.domain.models.Utility.Constants;
+import com.tempgroup.domain.models.Utility.Point;
 
 public class GameController {
 	private ArrayList<APlayer> players;
@@ -14,7 +18,6 @@ public class GameController {
 	private ArrayList<Habitat> habitatBag;
 	private Board gameBoard;
 	private Board choiceBoard;
-	private Scanner scanner;
 
 	public GameController(GameConfiguration config) {
 		this.createPlayers(config);
@@ -25,7 +28,6 @@ public class GameController {
 		gameBoard = new Board(Constants.WIDTH * Constants.TILESIZE, Constants.HEIGHT * Constants.TILESIZE);
 
 		choiceBoard = new Board(16, 4); //Small board to graphically show our choice tiles
-		scanner = config.getScanner();
 
 		this.initStarterTiles();
 
@@ -34,19 +36,15 @@ public class GameController {
 	private void createPlayers(GameConfiguration config) {
 		this.players = new ArrayList<APlayer>();
 
-		/*for (int i = 0; i < config.numPlayers; i++) {
-			Player player = new Player(config.playerNames.get(i));
-			this.players.add(player);
-		}*/
-		//Collections.shuffle(this.players);
-		APlayer bot1 = new AiPlayer("Bot1", new RandomMoveStrategy(), this);
-		APlayer bot2 = new AiPlayer("Bot2", new RandomMoveStrategy(), this);
+
+		APlayer bot1 = new AiPlayer(config.playerNames.get(0), new MaxScoreStrategy(), this);
+		APlayer bot2 = new AiPlayer(config.playerNames.get(1), new MaxScoreStrategy(), this);
 
 		this.players.add(bot1);
 		this.players.add(bot2);
 	}
 
-	public void endTurn()
+	public void endTurn(ArrayList<Tile> tilesChoice, ArrayList<Habitat> habitatChoice)
 	{
 		if(currPlayer == players.size() - 1)
 		{
@@ -54,16 +52,24 @@ public class GameController {
 		}else{
 			this.currPlayer++;
 		}
-	}
-
-	public void addChoiceTilesToChoiceBoard(Tile[] choiceTiles)
-	{
-		for(int i = 0; i < choiceTiles.length; i++)
+		for(Habitat h : habitatChoice)
 		{
-			choiceBoard.addTileToBoard(choiceTiles[i]);
+			returnHabitatToBag(h);
+		}
+		habitatChoice.clear();
+		for(Tile t : tilesChoice)
+		{
+			returnTileToBag(t);
+		}
+		tilesChoice.clear();
+	}
+	public void addChoiceTilesToChoiceBoard(ArrayList<Tile> choiceTiles)
+	{
+		for(int i = 0; i < choiceTiles.size(); i++)
+		{
+			choiceBoard.addTileToBoard(choiceTiles.get(i));
 		}
 	}
-
 	public int getCurrPlayer() { return currPlayer; }
 
 	public ArrayList<APlayer> getPlayers() {
@@ -71,8 +77,6 @@ public class GameController {
 	}
 	public Board getGameBoard() { return this.gameBoard; }
 	public Board getChoiceBoard() { return this.choiceBoard; }
-
-
 	public Tile getTileFromTileBag() {
 
 		Tile t = tilesBag.get(0);
@@ -122,123 +126,86 @@ public class GameController {
 	}
 	public boolean handleHabitatCulling(ArrayList<Habitat> habitatList)
 	{
-		ArrayList<Habitat> sameTokens = new ArrayList<>();
+		LinkedHashSet<HabitatToken> tokens = new LinkedHashSet<>();
 
-		String choice;
-		int same;
-
-
-
-		for(int i = 0; i < habitatList.size(); i++) {
-			same = 0;
-
-			for (int j = 0; j < habitatList.size(); j++) {
-
-				if (habitatList.get(i).getToken() == (habitatList.get(j).getToken())) {
-					same++;
-					sameTokens.add(habitatList.get(j));
-				}
-			}
-		}
-		if(sameTokens.size() == 4)
+		for(Habitat habitat : habitatList)
 		{
-			System.out.println("\nculling 4");
-			same = 4;
-			//return tokens to bag and get 4 more
-			for(int l = 0; l < same; l++) returnHabitatToBag(habitatList.get(l));
+			tokens.add(habitat.getToken());
+		}
+		//All 4 are the same
+		if(tokens.size() == 1 || tokens.size() == 2)
+		{
+			for(int i = 0; i < 4; i++) {
+				returnHabitatToBag(habitatList.get(i));
+			}
+			habitatList.clear();
 			shuffleHabitatBag();
-			sameTokens.clear();
-			for(int o = 0; o < same; o++) sameTokens.add(getHabitatFromBag());
+			for(int j = 0; j < 4; j++)
+				habitatList.add(getHabitatFromBag());
 
 			return true;
 		}
-		if(sameTokens.size() == 3)
-		{
-			System.out.println("\nculling 3");
-			same = 3;
-			System.out.println("Would you like to cull (y/n)");
-			choice = scanner.nextLine();
-
-			if(choice.equals("y") || choice.equals("Y"))
-			{
-				for(int n = 0; n < habitatList.size(); n++){
-					returnHabitatToBag(habitatList.get(n));
-				}
-				habitatList.clear();
-
-				shuffleHabitatBag();
-
-				for(int o = 0; o < 4; o++) habitatList.add(getHabitatFromBag());
-
-				return true;
-			}else{
-				return false;
-			}
-
-		}
-
 		return false;
 	}
-	public boolean checkGameOver()
+	public List<Point> validMoves(Tile[][] tileMatrix, ArrayList<Tile> playerTiles)
 	{
-		if(this.tilesBag.size() <= 3)
-		{
-			return true;
-		}
-		return false;
-	}
-	public List<Point> validMoves(Tile[][] tileMatrix){
 		List<Point> possibleMoves = new ArrayList<>();
 
-		for(int row = 1; row < Constants.WIDTH - 1; row++){
+		for(Tile t : playerTiles)
+		{
+			if(!t.emptyTile()) {
+				int x = t.getX();
+				int y = t.getY();
 
-			for(int column = 1; column < Constants.HEIGHT - 1; column++){
-
-				if(tileMatrix[row][column].emptyTile()){
-
-					if(!tileMatrix[row+1][column].emptyTile()){
-						Point p = new Point(row, column);
-						possibleMoves.add(p);
-
-					}else if(!tileMatrix[row-1][column].emptyTile()){
-						Point p = new Point(row, column);
-						possibleMoves.add(p);
-
-					}else if(!tileMatrix[row][column+1].emptyTile()){
-						Point p = new Point(row, column);
-						possibleMoves.add(p);
-
-					}else if(!tileMatrix[row+1][column-1].emptyTile()){
-						Point p = new Point(row, column);
-						possibleMoves.add(p);
-
-					}
-
+				if (tileMatrix[x + 1][y].emptyTile() && x+1 < Constants.WIDTH - 1) {
+					possibleMoves.add(new Point(x + 1, y));
 				}
+				if (tileMatrix[x - 1][y].emptyTile() && x - 1 > 0) {
+					possibleMoves.add(new Point(x - 1, y));
+				}
+				if (tileMatrix[x][y + 1].emptyTile() && y + 1 < Constants.HEIGHT - 1) {
+					possibleMoves.add(new Point(x, y + 1));
+				}
+				if (tileMatrix[x][y - 1].emptyTile() && y - 1 > 0) {
+					possibleMoves.add(new Point(x, y - 1));
+				}
+
 			}
 		}
 
-		return possibleMoves;
+		return possibleMoves.stream().distinct().collect(Collectors.toList());
 	}
+	public ArrayList<Tile> getValidHabitatMoves(ArrayList<Tile> playerTiles, Habitat h) {
+		ArrayList<Tile> possibleTiles = new ArrayList<>();
 
-
-	public List<Tile> getValidHabitatMoves(ArrayList<Tile> playerTiles, Habitat h) {
-		List<Tile> possibleTiles = new ArrayList<>();
-
-		for(int i = 0; i < playerTiles.size(); i++){
-
-			for(int j = 0; j < playerTiles.get(i).habitats.size(); j++){
-
-				if(playerTiles.get(i).habitats.get(j).getToken().equals(h.getToken())){
-
-					if(playerTiles.get(i).finalHabitat == null){
-
-						possibleTiles.add(playerTiles.get(i));
-					}
+		for(Tile t : playerTiles)
+		{
+			if(t.finalHabitat == null)
+			{
+				for(Habitat habitat : t.habitats)
+				{
+					if(habitat.getToken() == h.getToken())
+						possibleTiles.add(t);
 				}
 			}
 		}
-
 		return possibleTiles;
+	}
+	public void updateDeck(ArrayList<Tile> tilesChoice, ArrayList<Habitat> habitatChoice)
+	{
+		for (int i = 0; i < 4; i++) {
+			habitatChoice.add(getHabitatFromBag());
+			tilesChoice.add(getTileFromTileBag());
+			tilesChoice.get(i).setX(i);
+			tilesChoice.get(i).setY(0);
+		}
+
+		//Returns true if culling
+		while(handleHabitatCulling(habitatChoice));
+	}
+	public void updateView(ArrayList<Tile> tilesChoice, Board gameBoard, Tile[][] playerTileMatrix)
+	{
+			addChoiceTilesToChoiceBoard(tilesChoice);
+			gameBoard.matrixToBoard(playerTileMatrix);
 	}
 }

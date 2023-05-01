@@ -1,4 +1,4 @@
-package com.tempgroup;
+package com.tempgroup.domain.models.Utility;
 
 public class DisplayColour {
         public static final String RESET = "\033[0m"; // Text Reset

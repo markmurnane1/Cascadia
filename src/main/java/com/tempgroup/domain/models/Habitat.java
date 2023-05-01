@@ -1,6 +1,6 @@
 package com.tempgroup.domain.models;
 
-import com.tempgroup.DisplayColour;
+import com.tempgroup.domain.models.Utility.DisplayColour;
 
 public class Habitat {
     private String colour;

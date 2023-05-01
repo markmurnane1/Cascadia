@@ -3,6 +3,7 @@ package com.tempgroup.domain.models.Player;
 import com.tempgroup.application.controllers.GameController;
 import com.tempgroup.domain.models.Habitat;
 import com.tempgroup.domain.models.Move.INextMoveStrategy;
+import com.tempgroup.domain.models.ScoreCard.AScoreCard;
 import com.tempgroup.domain.models.Tile;
 
 import java.util.ArrayList;
@@ -19,11 +20,13 @@ public class AiPlayer extends APlayer {
     }
 
     @Override
-    public void takeTileTurn(Tile[] choiceTiles) {
-        Tile t = this.iNextMoveStrategy.getNextMove(game, this.getPlayerTileMatrix(), choiceTiles);
+    public void takeTileTurn(ArrayList<Tile> choiceTiles, AScoreCard scoreCard) {
+        Tile t = this.iNextMoveStrategy.getNextMove(game, this.getPlayerTileMatrix(), this.getPlayerTiles(), choiceTiles, scoreCard);
         addTileToPlayerTiles(t);
     }
-    public void takeHabitatTurn(ArrayList<Habitat> choiceHabitat) {
-        this.iNextMoveStrategy.getNextHabitatMove(game, this.getPlayerTiles(), choiceHabitat);
+
+    public void takeHabitatTurn(ArrayList<Habitat> choiceHabitat, AScoreCard scoreCard) {
+        this.iNextMoveStrategy.getNextHabitatMove(game, this.getPlayerTiles(), choiceHabitat, scoreCard, this.getPlayerTileMatrix());
+        this.incrementTurnTaken();
     }
 }

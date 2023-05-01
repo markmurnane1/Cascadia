@@ -31,17 +31,8 @@ public class GameConfiguration {
 	}
 
 	private void setupGame() {
-		int numPlayers = 0;
 
-		while (numPlayers < 2 || numPlayers > 4) {
-			try {
-				numPlayers = Integer.parseInt(prompt("How many players are playing? (2-4)"));
-			} catch (Exception e) {
-				System.out.println("You must enter an integer value between 2 and 4.\n");
-			}
-		}
-
-		this.numPlayers = numPlayers;
+		this.numPlayers = 2;
 
 		ArrayList<String> playerNames = new ArrayList<String>();
 
@@ -49,7 +40,7 @@ public class GameConfiguration {
 			String playerName = "";
 
 			while (playerName.isEmpty()) {
-				playerName = prompt(String.format("\nEnter name of player %d", i + 1));
+				playerName = prompt(String.format("\nEnter name of Bot %d", i + 1));
 			}
 
 			playerNames.add(playerName);
