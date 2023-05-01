@@ -38,6 +38,10 @@ public abstract class AScoreCard {
             neighbours.add(matrix[t.getX()][t.getY() + 1].finalHabitat.getToken());
         if (matrix[t.getX()][t.getY() - 1].finalHabitat != null)
             neighbours.add(matrix[t.getX()][t.getY() - 1].finalHabitat.getToken());
+        if (matrix[t.getX() + 1][t.getY() + 1].finalHabitat != null)
+            neighbours.add(matrix[t.getX() + 1][t.getY() + 1].finalHabitat.getToken());
+        if (matrix[t.getX() - 1][t.getY() - 1].finalHabitat != null)
+            neighbours.add(matrix[t.getX() - 1][t.getY() - 1].finalHabitat.getToken());
 
         return neighbours;
     }
@@ -45,11 +49,12 @@ public abstract class AScoreCard {
     ArrayList<Tile> getAllNeighbours(Tile[][] matrix, Tile t) {
         ArrayList<Tile> neighbours = new ArrayList<>();
 
-
         if (matrix[t.getX() + 1][t.getY()].terrains.size() > 0) neighbours.add(matrix[t.getX() + 1][t.getY()]);
         if (matrix[t.getX() - 1][t.getY()].terrains.size() > 0) neighbours.add(matrix[t.getX() - 1][t.getY()]);
         if (matrix[t.getX()][t.getY() + 1].terrains.size() > 0) neighbours.add(matrix[t.getX()][t.getY() + 1]);
         if (matrix[t.getX()][t.getY() - 1].terrains.size() > 0) neighbours.add(matrix[t.getX()][t.getY() - 1]);
+        if (matrix[t.getX() + 1][t.getY() + 1].terrains.size() > 0) neighbours.add(matrix[t.getX() + 1][t.getY() + 1]); //top-right
+        if (matrix[t.getX() - 1][t.getY() - 1].terrains.size() > 0) neighbours.add(matrix[t.getX() - 1][t.getY() - 1]); //bottom left
 
         return neighbours;
     }
@@ -120,8 +125,6 @@ public abstract class AScoreCard {
             lineCount.add(count);
         }
 
-
-
         return Collections.max(lineCount);
     }
 
@@ -135,10 +138,9 @@ public abstract class AScoreCard {
              #### |
              #### | if tile has two terrains the first one will refer to the top and right
              #### | position of the tile
-             #### | So if the tile has two terrains and the other tile has two terrains the second
-                    tile terrain must be terrain.get(0)
+             #### |
 
-            terrain.get(1) will refer to bottom and left
+                    second terrain will refer to bottom and left
         */
         if (tileOne.terrains.isEmpty() || tileTwo.terrains.isEmpty()) return false;
 

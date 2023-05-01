@@ -38,9 +38,19 @@ public class Board
     }
 
     public void matrixToBoard(Tile[][] matrix){
+
+        clearBoard();
+
         for(int i = 0; i < Constants.WIDTH; i++){
             for(int j = 0; j < Constants.HEIGHT; j++){
                 this.addTileToBoard(matrix[i][j]);
+            }
+        }
+    }
+    private void clearBoard() {
+        for (int row = 0; row < this.getWidth(); row++) {
+            for (int column = 0; column < this.getHeight(); column++) {
+                this.setBoardPos(row, column, DisplayColour.RESET + "#" + DisplayColour.RESET);
             }
         }
     }

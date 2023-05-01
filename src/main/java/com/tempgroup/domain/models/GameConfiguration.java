@@ -48,12 +48,22 @@ public class GameConfiguration {
 
 		this.playerNames = playerNames;
 	}
+	private void initKeyStoneTile(ArrayList<Tile> tileBag)
+	{
+		for(Tile t : tileBag)
+		{
+			if(t.terrains.size() == 1 && t.habitats.size() == 1)
+			{
+				t.makeKeyStoneTile();
+			}
+		}
+	}
 
 	private void setupTileBag()  //Generate 100 tiles
 	{
 		tileBag = new ArrayList<>();
 
-		for(int i = 0; i < 100; i++)
+		for(int i = 0; i < 200; i++)
 		{
 			Tile tile = new Tile();
 
@@ -78,6 +88,8 @@ public class GameConfiguration {
 
 			tileBag.add(tile);
 		}
+
+		initKeyStoneTile(tileBag);
 	}
 	public ArrayList<Tile> getTileBag()
 	{

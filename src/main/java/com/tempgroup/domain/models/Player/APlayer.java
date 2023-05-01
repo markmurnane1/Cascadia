@@ -10,15 +10,18 @@ import java.util.ArrayList;
 public abstract class APlayer {
     private String name;
     private int turnsTaken;
+    private int natureTokens;
     private ArrayList<Tile> playerTiles;
     private Tile[][] playerTileMatrix;
 
     APlayer(String name){
         this.name = name;
-        turnsTaken = 0;
+        this.turnsTaken = 0;
+        this.natureTokens = 0;
         playerTiles = new ArrayList<>();
         playerTileMatrix = new Tile[Constants.WIDTH][Constants.HEIGHT];
 
+        //Add empty tiles
         for(int i = 0; i < Constants.WIDTH; i++){
             for(int j = 0; j < Constants.HEIGHT; j++){
                 Tile t = new Tile();
@@ -27,6 +30,18 @@ public abstract class APlayer {
                 playerTileMatrix[i][j] = t;
             }
         }
+    }
+    public void addNatureToken()
+    {
+        this.natureTokens++;
+    }
+    public void spendNatureToken()
+    {
+        this.natureTokens--;
+    }
+    public int getNatureToken()
+    {
+        return this.natureTokens;
     }
     public String getName()
     {

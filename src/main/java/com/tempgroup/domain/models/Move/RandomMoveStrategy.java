@@ -2,6 +2,7 @@ package com.tempgroup.domain.models.Move;
 
 import com.tempgroup.application.controllers.GameController;
 import com.tempgroup.domain.models.Habitat;
+import com.tempgroup.domain.models.Player.APlayer;
 import com.tempgroup.domain.models.ScoreCard.AScoreCard;
 import com.tempgroup.domain.models.Utility.Point;
 import com.tempgroup.domain.models.Tile;
@@ -27,12 +28,19 @@ public class RandomMoveStrategy implements INextMoveStrategy{
         t.setX(row);
         t.setY(column);
 
+        if(t.isKeyStoneTile())
+        {
+            game.getPlayers().get(game.getCurrPlayer()).addNatureToken();
+        }
+
         return t;
     }
 
+
     @Override
+
     public void getNextHabitatMove(GameController game, ArrayList<Tile> playerTiles, ArrayList<Habitat> choiceHabitats, AScoreCard scoreCard, Tile[][] matrix) {
-        //get a random Habitat
+
         Random random = new Random();
 
         Habitat h = choiceHabitats.get(random.nextInt(choiceHabitats.size()));
@@ -45,8 +53,15 @@ public class RandomMoveStrategy implements INextMoveStrategy{
             t.habitats.clear();
             t.habitats.add(h);
             t.finalHabitat = h;
+
+            if(t.isKeyStoneTile())
+            {
+
+            }
+
         }else{
-            System.out.println("No Valid Habitat Placement. Returning to bag.");
+            System.out.println("No Valid Wildlife Placement. Returning to bag.");
+
         }
 
 

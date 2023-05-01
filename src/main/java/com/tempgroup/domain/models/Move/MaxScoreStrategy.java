@@ -15,33 +15,40 @@ public class MaxScoreStrategy implements INextMoveStrategy{
     @Override
     public Tile getNextMove(GameController game, Tile[][] tileMatrix, ArrayList<Tile> playerTiles, ArrayList<Tile> choiceTiles, AScoreCard scoreCard)
     {
+
         List<Point> moves = game.validMoves(tileMatrix, playerTiles);
         int count;
         int max = scoreCard.countLargestConnectedHabitat(tileMatrix, playerTiles);
-
         Tile maxTile = new Tile();
+
 
         for(Tile t : choiceTiles)
         {
+            playerTiles.add(t);
             for(Point move : moves)
             {
+
                 t.setX(move.x);
                 t.setY(move.y);
                 tileMatrix[move.x][move.y] = t;
-                playerTiles.add(t);
+
 
                 count = scoreCard.countLargestConnectedHabitat(tileMatrix, playerTiles);
 
                 if(count > max)
                 {
                     max = count;
-                    maxTile = t;
+                    maxTile.terrains.addAll(t.getTerrains());
+                    maxTile.habitats.addAll(t.getHabitats());
+                    maxTile.setX(move.x);
+                    maxTile.setY(move.y);
                 }
 
                 //Reset modified position
-                playerTiles.remove(t);
+                tileMatrix[move.x][move.y] = null;
                 tileMatrix[move.x][move.y] = new Tile();
             }
+            playerTiles.remove(t);
         }
 
         //If no tile placement results in a higher score choose a random tile placement
@@ -58,6 +65,8 @@ public class MaxScoreStrategy implements INextMoveStrategy{
             maxTile = choiceTiles.get(random.nextInt(choiceTiles.size()));
             maxTile.setX(column);
             maxTile.setY(row);
+        }else{
+
         }
 
         return maxTile;
@@ -108,6 +117,11 @@ public class MaxScoreStrategy implements INextMoveStrategy{
             maxTile.habitats.add(maxFinalHabitat);
             maxTile.finalHabitat = maxFinalHabitat;
             madeMove = true;
+            //Check if keystone tile
+            if(maxTile.isKeyStoneTile())
+            {
+                game.getPlayers().get(game.getCurrPlayer()).addNatureToken();
+            }
         }else{
 
             //In this case we will just choose a random move
@@ -124,6 +138,11 @@ public class MaxScoreStrategy implements INextMoveStrategy{
                     t.habitats.add(h);
                     t.finalHabitat = h;
                     madeMove = true;
+                    //Check if keystone tile
+                    if(t.isKeyStoneTile())
+                    {
+                        game.getPlayers().get(game.getCurrPlayer()).addNatureToken();
+                    }
                     break;
                 }
             }

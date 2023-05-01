@@ -12,34 +12,31 @@ import com.tempgroup.domain.models.Utility.Constants;
 
 public class App {
     public static void main(String[] args) {
+
         PrintController printer = new PrintController();
         GameConfiguration config = new GameConfiguration();
         GameController game = new GameController(config);
 
-        ArrayList<APlayer> players = game.getPlayers();
-        ArrayList<Habitat> habitatChoice = new ArrayList<>();
         AScoreCard scoreCard = new ScoreCardA();
 
-        Tile[][] currTiles;
+        ArrayList<APlayer> players = game.getPlayers();
         ArrayList<Tile> tilesChoice = new ArrayList<>();
+        ArrayList<Habitat> habitatChoice = new ArrayList<>();
 
-        Board currBoard = game.getGameBoard();
-
-        while(players.get(game.getCurrPlayer()).getTurnsTaken() <= Constants.TURNS)
+        while(players.get(game.getCurrPlayer()).getTurnsTaken() < Constants.TURNS)
         {
-            currTiles = players.get(game.getCurrPlayer()).getPlayerTileMatrix();
-
+            APlayer currentPlayer = players.get(game.getCurrPlayer());
 
             //Update Model
             game.updateDeck(tilesChoice, habitatChoice);
-            game.updateView(tilesChoice, currBoard, currTiles);
+            game.updateView(tilesChoice, game.getGameBoard(), currentPlayer.getPlayerTileMatrix());
 
-            //Display
-            printer.displayView(currBoard, game.getChoiceBoard(), habitatChoice, players.get(game.getCurrPlayer()).getName());
+            //Display View
+            printer.displayView(game.getGameBoard(), game.getChoiceBoard(), habitatChoice, currentPlayer.getName());
 
             //Take Turn
-            players.get(game.getCurrPlayer()).takeTileTurn(tilesChoice, scoreCard);
-            players.get(game.getCurrPlayer()).takeHabitatTurn(habitatChoice, scoreCard);
+            currentPlayer.takeTileTurn(tilesChoice, scoreCard);
+            currentPlayer.takeHabitatTurn(habitatChoice, scoreCard);
             game.endTurn(tilesChoice, habitatChoice);
 
             config.prompt("Press any key to continue...");
@@ -50,7 +47,5 @@ public class App {
             printer.displayScoring(scoreCard, player);
         }
 
-
-       
     }
 }

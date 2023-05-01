@@ -36,9 +36,8 @@ public class GameController {
 	private void createPlayers(GameConfiguration config) {
 		this.players = new ArrayList<APlayer>();
 
-
-		APlayer bot1 = new AiPlayer(config.playerNames.get(0), new MaxScoreStrategy(), this);
-		APlayer bot2 = new AiPlayer(config.playerNames.get(1), new MaxScoreStrategy(), this);
+		APlayer bot1 = new AiPlayer(config.playerNames.get(0), new RandomMoveStrategy(), this);
+		APlayer bot2 = new AiPlayer(config.playerNames.get(1), new RandomMoveStrategy(), this);
 
 		this.players.add(bot1);
 		this.players.add(bot2);
@@ -59,7 +58,7 @@ public class GameController {
 		habitatChoice.clear();
 		for(Tile t : tilesChoice)
 		{
-			returnTileToBag(t);
+			//returnTileToBag(t);
 		}
 		tilesChoice.clear();
 	}
@@ -169,6 +168,20 @@ public class GameController {
 				if (tileMatrix[x][y - 1].emptyTile() && y - 1 > 0) {
 					possibleMoves.add(new Point(x, y - 1));
 				}
+				//up-right and down-left
+				if (tileMatrix[x+1][y - 1].emptyTile() && y - 1 > 0 && x+1 < Constants.WIDTH - 1) {
+					possibleMoves.add(new Point(x+1, y - 1));
+				}
+				if (tileMatrix[x-1][y + 1].emptyTile() && y + 1 < Constants.HEIGHT - 1 && x+1 < Constants.WIDTH - 1) {
+					possibleMoves.add(new Point(x-1, y + 1));
+				}
+				//up-left and down-right
+				if (tileMatrix[x+1][y + 1].emptyTile() && y + 1 < Constants.HEIGHT - 1 && x+1 < Constants.WIDTH - 1) {
+					possibleMoves.add(new Point(x+1, y + 1));
+				}
+				if (tileMatrix[x-1][y - 1].emptyTile() && y - 1 > 0 && x-1 > 0) {
+					possibleMoves.add(new Point(x-1, y - 1));
+				}
 
 			}
 		}
@@ -193,6 +206,7 @@ public class GameController {
 	}
 	public void updateDeck(ArrayList<Tile> tilesChoice, ArrayList<Habitat> habitatChoice)
 	{
+		System.out.println(tilesBag.size());
 		for (int i = 0; i < 4; i++) {
 			habitatChoice.add(getHabitatFromBag());
 			tilesChoice.add(getTileFromTileBag());

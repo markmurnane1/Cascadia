@@ -7,11 +7,10 @@ import java.util.List;
 public class Tile {
 
     public List<Habitat> habitats; //tile can have up to 3 wildlife token
-    public List<Terrain> terrains; //tiles can have upto 2 terrains
+    public List<Terrain> terrains; //tiles can have up to 2 terrains
     public Habitat finalHabitat;
     private int x, y;
-
-    public boolean habitatScored = false;
+    private boolean keyStoneTile = false;
 
     public Tile()
     {
@@ -20,8 +19,6 @@ public class Tile {
     }
     public Tile(Terrain terrain, Habitat t)
     {
-
-
         habitats = new ArrayList<Habitat>();
         habitats.add(t);
 
@@ -87,6 +84,22 @@ public class Tile {
 
     public boolean emptyTile(){
         return this.habitats.isEmpty() && this.terrains.isEmpty();
+    }
+    public boolean isKeyStoneTile()
+    {
+        return this.keyStoneTile;
+    }
+    public void makeKeyStoneTile()
+    {
+        this.keyStoneTile = true;
+    }
+    public List<Terrain> getTerrains()
+    {
+        return this.terrains;
+    }
+    public List<Habitat> getHabitats()
+    {
+        return this.habitats;
     }
 
 
