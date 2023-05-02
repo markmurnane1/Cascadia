@@ -2,7 +2,6 @@ package com.tempgroup.domain.models.Move;
 
 import com.tempgroup.application.controllers.GameController;
 import com.tempgroup.domain.models.Habitat;
-import com.tempgroup.domain.models.Player.APlayer;
 import com.tempgroup.domain.models.ScoreCard.AScoreCard;
 import com.tempgroup.domain.models.Utility.Point;
 import com.tempgroup.domain.models.Tile;
@@ -11,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RandomMoveStrategy implements INextMoveStrategy{
+public class RandomMoveStrategy implements INextMoveStrategy {
     @Override
-    public Tile getNextMove(GameController game, Tile[][] tileMatrix, ArrayList<Tile> playerTiles, ArrayList<Tile> choiceTiles, AScoreCard scoreCard) {
+    public Tile getNextMove(GameController game, Tile[][] tileMatrix, ArrayList<Tile> playerTiles,
+            ArrayList<Tile> choiceTiles, AScoreCard scoreCard) {
         List<Point> moves = game.validMoves(tileMatrix, playerTiles);
 
         Random random = new Random();
@@ -23,23 +23,20 @@ public class RandomMoveStrategy implements INextMoveStrategy{
         int row = moves.get(index).x;
         int column = moves.get(index).y;
 
-
         Tile t = choiceTiles.get(random.nextInt(choiceTiles.size()));
         t.setX(row);
         t.setY(column);
 
-        if(t.isKeyStoneTile())
-        {
+        if (t.isKeyStoneTile()) {
             game.getPlayers().get(game.getCurrPlayer()).addNatureToken();
         }
 
         return t;
     }
 
-
     @Override
-
-    public void getNextHabitatMove(GameController game, ArrayList<Tile> playerTiles, ArrayList<Habitat> choiceHabitats, AScoreCard scoreCard, Tile[][] matrix) {
+    public void getNextHabitatMove(GameController game, ArrayList<Tile> playerTiles, ArrayList<Habitat> choiceHabitats,
+            AScoreCard scoreCard, Tile[][] matrix) {
 
         Random random = new Random();
 
@@ -47,23 +44,14 @@ public class RandomMoveStrategy implements INextMoveStrategy{
 
         List<Tile> possibleTilesToPlaceHabitat = game.getValidHabitatMoves(playerTiles, choiceHabitats.get(0));
 
-        if(possibleTilesToPlaceHabitat.size() > 0){
-
+        if (possibleTilesToPlaceHabitat.size() > 0) {
             Tile t = possibleTilesToPlaceHabitat.get(random.nextInt(possibleTilesToPlaceHabitat.size()));
             t.habitats.clear();
             t.habitats.add(h);
             t.finalHabitat = h;
-
-            if(t.isKeyStoneTile())
-            {
-
-            }
-
-        }else{
+        } else {
             System.out.println("No Valid Wildlife Placement. Returning to bag.");
-
         }
-
 
     }
 
