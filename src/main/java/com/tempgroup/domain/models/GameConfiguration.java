@@ -31,7 +31,6 @@ public class GameConfiguration {
 	}
 
 	private void setupGame() {
-
 		this.numPlayers = 2;
 
 		ArrayList<String> playerNames = new ArrayList<String>();
@@ -48,39 +47,34 @@ public class GameConfiguration {
 
 		this.playerNames = playerNames;
 	}
-	private void initKeyStoneTile(ArrayList<Tile> tileBag)
-	{
-		for(Tile t : tileBag)
-		{
-			if(t.terrains.size() == 1 && t.habitats.size() == 1)
-			{
+
+	private void initKeyStoneTile(ArrayList<Tile> tileBag) {
+		for (Tile t : tileBag) {
+			if (t.terrains.size() == 1 && t.habitats.size() == 1) {
 				t.makeKeyStoneTile();
 			}
 		}
 	}
 
-	private void setupTileBag()  //Generate 100 tiles
+	private void setupTileBag() // Generate 100 tiles
 	{
 		tileBag = new ArrayList<>();
 
-		for(int i = 0; i < 200; i++)
-		{
+		for (int i = 0; i < 200; i++) {
 			Tile tile = new Tile();
 
 			int numOfTerrains = new Random().nextInt(2) + 1;
 			int numOfHabitats = new Random().nextInt(2) + 1;
 
 			tile.habitats = new ArrayList<Habitat>();
-			for(int j = 0; j < numOfHabitats; j++)
-			{
+			for (int j = 0; j < numOfHabitats; j++) {
 				int pickHabitat = new Random().nextInt(HabitatToken.values().length);
 				Habitat h = new Habitat(HabitatToken.VALUES.get(pickHabitat));
 				tile.habitats.add(h);
 			}
 
 			tile.terrains = new ArrayList<Terrain>();
-			for(int j = 0; j < numOfTerrains; j++)
-			{
+			for (int j = 0; j < numOfTerrains; j++) {
 				int pickTerrain = new Random().nextInt(TerrainType.values().length);
 				Terrain t = new Terrain(TerrainType.VALUES.get(pickTerrain));
 				tile.terrains.add(t);
@@ -91,35 +85,31 @@ public class GameConfiguration {
 
 		initKeyStoneTile(tileBag);
 	}
-	public ArrayList<Tile> getTileBag()
-	{
+
+	public ArrayList<Tile> getTileBag() {
 		return this.tileBag;
 	}
-	public Scanner getScanner() { return this.scanner; }
 
-	public ArrayList<Habitat> setupHabitatBag()
-	{
+	public Scanner getScanner() {
+		return this.scanner;
+	}
+
+	public ArrayList<Habitat> setupHabitatBag() {
 		ArrayList<Habitat> habitatBag = new ArrayList<>();
 
-
-		for(int i = 0; i < 20; i++)
-		{
+		for (int i = 0; i < 20; i++) {
 			habitatBag.add(new Habitat(HabitatToken.BEAR));
 		}
-		for(int i = 0; i < 20; i++)
-		{
+		for (int i = 0; i < 20; i++) {
 			habitatBag.add(new Habitat(HabitatToken.ELK));
 		}
-		for(int i = 0; i < 20; i++)
-		{
+		for (int i = 0; i < 20; i++) {
 			habitatBag.add(new Habitat(HabitatToken.FOX));
 		}
-		for(int i = 0; i < 20; i++)
-		{
+		for (int i = 0; i < 20; i++) {
 			habitatBag.add(new Habitat(HabitatToken.HAWK));
 		}
-		for(int i = 0; i < 20; i++)
-		{
+		for (int i = 0; i < 20; i++) {
 			habitatBag.add(new Habitat(HabitatToken.SALMON));
 		}
 

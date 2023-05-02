@@ -2,10 +2,7 @@ package com.tempgroup.domain.models;
 
 import com.tempgroup.domain.models.Utility.DisplayColour;
 
-
-
-public class Terrain
-{
+public class Terrain {
     private String colour;
     private TerrainType type;
 
@@ -37,6 +34,9 @@ public class Terrain
     public String getColour() {
         return this.colour;
     }
-    public TerrainType getTerrain() { return this.type; }
+
+    public TerrainType getTerrain() {
+        return this.type;
+    }
 
 }

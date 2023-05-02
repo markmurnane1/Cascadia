@@ -18,7 +18,7 @@ public class Habitat {
                 symbol = "H";
                 break;
             case BEAR:
-                colour = DisplayColour.BLUE; //ADD brown
+                colour = DisplayColour.BLUE; // ADD brown
                 symbol = "B";
                 break;
             case ELK:
@@ -46,7 +46,8 @@ public class Habitat {
         return this.symbol;
     }
 
-    public HabitatToken getToken() { return this.token; }
-
+    public HabitatToken getToken() {
+        return this.token;
+    }
 
 }

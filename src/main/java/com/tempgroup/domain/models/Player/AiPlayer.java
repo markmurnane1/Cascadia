@@ -23,7 +23,7 @@ public class AiPlayer extends APlayer {
     public void takeTileTurn(ArrayList<Tile> choiceTiles, AScoreCard scoreCard) {
         Tile t = this.iNextMoveStrategy.getNextMove(game, this.getPlayerTileMatrix(), this.getPlayerTiles(),
                 choiceTiles, scoreCard);
-        addTileToPlayerTiles(t);
+        this.addTileToPlayerTiles(t);
     }
 
     public void takeHabitatTurn(ArrayList<Habitat> choiceHabitat, AScoreCard scoreCard) {

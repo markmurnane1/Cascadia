@@ -14,60 +14,62 @@ public abstract class APlayer {
     private ArrayList<Tile> playerTiles;
     private Tile[][] playerTileMatrix;
 
-    APlayer(String name){
+    APlayer(String name) {
         this.name = name;
         this.turnsTaken = 0;
         this.natureTokens = 0;
-        playerTiles = new ArrayList<>();
-        playerTileMatrix = new Tile[Constants.WIDTH][Constants.HEIGHT];
+        this.playerTiles = new ArrayList<>();
+        this.playerTileMatrix = new Tile[Constants.WIDTH][Constants.HEIGHT];
 
-        //Add empty tiles
-        for(int i = 0; i < Constants.WIDTH; i++){
-            for(int j = 0; j < Constants.HEIGHT; j++){
+        // Add empty tiles
+        for (int i = 0; i < Constants.WIDTH; i++) {
+            for (int j = 0; j < Constants.HEIGHT; j++) {
                 Tile t = new Tile();
                 t.setX(i);
                 t.setY(j);
-                playerTileMatrix[i][j] = t;
+                this.playerTileMatrix[i][j] = t;
             }
         }
     }
-    public void addNatureToken()
-    {
+
+    public void addNatureToken() {
         this.natureTokens++;
     }
-    public void spendNatureToken()
-    {
+
+    public void spendNatureToken() {
         this.natureTokens--;
     }
-    public int getNatureToken()
-    {
+
+    public int getNatureToken() {
         return this.natureTokens;
     }
-    public String getName()
-    {
+
+    public String getName() {
         return name;
     }
-    public int getTurnsTaken()
-    {
+
+    public int getTurnsTaken() {
         return this.turnsTaken;
     }
-    public void incrementTurnTaken()
-    {
+
+    public void incrementTurnTaken() {
         this.turnsTaken++;
     }
-    public ArrayList<Tile> getPlayerTiles()
-    {
+
+    public ArrayList<Tile> getPlayerTiles() {
         return this.playerTiles;
     }
-    public Tile[][] getPlayerTileMatrix()
-    {
+
+    public Tile[][] getPlayerTileMatrix() {
         return this.playerTileMatrix;
     }
-    public void addTileToPlayerTiles(Tile t)
-    {
-        playerTileMatrix[t.getX()][t.getY()] = t;
-        playerTiles.add(t);
+
+    public void addTileToPlayerTiles(Tile t) {
+        this.playerTileMatrix[t.getX()][t.getY()] = t;
+        this.playerTiles.add(t);
     }
+
     public abstract void takeTileTurn(ArrayList<Tile> choiceTiles, AScoreCard scoreCard);
+
     public abstract void takeHabitatTurn(ArrayList<Habitat> choiceHabitat, AScoreCard scoreCard);
 }

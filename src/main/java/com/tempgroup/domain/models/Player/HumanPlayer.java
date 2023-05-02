@@ -19,7 +19,6 @@ public class HumanPlayer extends APlayer {
 
 	}
 
-
 	@Override
 	public void takeTileTurn(ArrayList<Tile> choiceTiles, AScoreCard scoreCard) {
 
